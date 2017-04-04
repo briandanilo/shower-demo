@@ -21,7 +21,12 @@ export default function Views(store) {
     Don't fuck it up!`
     $('#welcome-banner').show();
     $('#welcome-banner').html(el);
-    store.dispatch({type:"GET_TODOS"});
+  }
+
+  this.renderTodo = function(i,x,a){
+    console.log("item ",i)
+    let el = `<li>${i.name}</li>`
+    $('#todo-list').append(el)
   }
 
 }

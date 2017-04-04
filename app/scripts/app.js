@@ -18,6 +18,7 @@ export default function app() {
       case "TESTING":
         console.log("action type: ",action.type);
         return state
+        break;
       case "AUTHENTICATE_USER":
         console.log("action type: ",action.type);
         server.authenticateUser(action.username,action.password)
@@ -26,10 +27,19 @@ export default function app() {
         console.log("action type: ",action.type);
         views.hideLoginForm();
         views.showWelcomeBanner(action);
+        server.getTodos(action);
         let tempState = Object.assign({},state,{userToken:action.userToken,username:action.name})
         return tempState;
+        break;
       case "GET_TODOS":
         console.log("action type: ",action.type);
+        break;
+      case "HANDLE_TODO_QUERY":
+        console.log("action type: ",action.type);
+        let todos = action.d.data;
+        todos.forEach(views.renderTodo)
+        let newState = Object.assign({},state,{userToken:action.userToken,username:action.name},{todos:todos})
+        return newState
        default:
          return state
      }
