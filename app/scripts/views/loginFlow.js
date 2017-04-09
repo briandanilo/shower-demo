@@ -3,9 +3,11 @@ import moment from 'moment';
 export default function LoginFlow(store) {
 
   $('#login-submit-btn').on('click',function(e){
+    e.preventDefault();
     console.log("btn clicked!")
     let u = $('#username-form').val();
     let p = $('#password-form').val();
+    console.log("u ",u," p ",p)
     store.dispatch({type:"AUTHENTICATE_USER",username:u,password:p})
   })
 
@@ -27,6 +29,8 @@ export default function LoginFlow(store) {
   }
 
   function submitRegistration(e){
+    e.preventDefault();
+
     console.log("clicked reg button!")
     let n = $('#register-name').val();
     let m = $('#register-email').val();
@@ -40,8 +44,7 @@ export default function LoginFlow(store) {
 
   this.showWelcomeBanner = function(action){
     console.log("showing welcome banner")
-    let el = `<p>Hello ${action.name}. Your token is ${action.userToken}.
-    Don't fuck it up!`
+    let el = `<p>Hello ${action.name}. Browse or submit a new job!`
     $('#welcome-banner').show();
     $('#welcome-banner').html(el);
   }

@@ -1,12 +1,15 @@
 export default function Server(store) {
 
+  const EMAIL_SERVER = 'https://friendlywager.herokuapp.com/sendEmail'
   const REG_URL = 'https://api.backendless.com/v1/users/register';
   const QUERY_URL = 'http://api.backendless.com/v1/data/jobs'
   const AUTH_URL = 'https://api.backendless.com/v1/users/login';
   const APP_ID =  '83DD562A-8221-C480-FF2A-2F7C87E9F700';
   const SECRET_KEY =  '3ED81095-FAB1-DF19-FF8C-794481769700';
 
-  this.rsvp = function (user,token,job){
+
+
+  this.rsvp = function (user, email, token, job){
     console.log("about to rsvp!!!!")
     console.log("user,token,job",user,token,job)
     let settings = {
@@ -19,12 +22,15 @@ export default function Server(store) {
         "user-token":token
       },
       data: JSON.stringify({
-        "taker":user
+        "taker":user,
+        "takerEmail":email
       }),
    }
 
    $.ajax(settings).then(function(d,s,x){
-     console.log("rsvp response ",d,s,x)
+     console.log("rsvp response ",d,s,x);
+     console.log("lets send a fucking email!");
+     sendEmail(d.listerEmail,d.takerEmail,d.jobDate,d.jobTitle)
      store.dispatch({type:"JOB_TAKEN",d});
    })
   }
@@ -42,13 +48,33 @@ export default function Server(store) {
       data: JSON.stringify({
         "name":action.jobTitle,
         "jobStartTime":action.jobDate,
-        "ownerId":state.username
+        "ownerId":state.username,
+        "listerEmail":state.email
       }),
    }
 
    $.ajax(settings).then(function(d,s,x){
      console.log("response from post job ",d,s,x)
      store.dispatch({type:"UPDATE_JOBS"});
+   })
+  }
+
+  const sendEmail = function(lister,shower,jobDate,jobTitle){
+    let settings = {
+      type: 'POST',
+      contentType: 'application/json',
+      url: EMAIL_SERVER,
+      data: JSON.stringify({
+        "lister":lister,
+        "shower":shower,
+        "emailPeople":[lister,shower]
+        // "jobDate":jobDate,
+        // "jobTitle":jobTitle
+      }),
+   }
+   console.log("sending an email w/ content ",settings.data)
+   $.ajax(settings).then(function(d,s,x){
+     console.log("response from post job ",d,s,x)
    })
   }
 
@@ -98,7 +124,8 @@ export default function Server(store) {
      console.log("response ",d)
      let userToken = d["user-token"];
      let name = d["name"];
-     store.dispatch({type:"HANDLE_LOGIN",userToken,name});
+     let email = d["email"];
+     store.dispatch({type:"HANDLE_LOGIN",userToken,name,email});
    })
 
 

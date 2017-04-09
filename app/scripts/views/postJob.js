@@ -4,6 +4,7 @@ export default function PostJob(store) {
 
 
   $('#submit-new-job').on('click',function(e){
+    e.preventDefault(); 
     console.log("btn clicked!")
     let t = $('#new-job-title').val();
     let d = $('#new-job-date').val();
@@ -14,6 +15,10 @@ export default function PostJob(store) {
 
   this.hideNewJobForm = function(){
     $('#job-post-form').hide();
+  }
+
+  this.showNewJobForm = function(){
+    $('#job-post-form').show();
   }
 
 

@@ -29,11 +29,11 @@ export default function app() {
         server.authenticateUser(action.username,action.password)
         return state;
       case "HANDLE_LOGIN":
-        console.log("action type: ",action.type);
+        console.log("action type: ",action.type,action);
         loginView.hideLoginForm();
         loginView.showWelcomeBanner(action);
         server.getJobs(action);
-        let tempState = Object.assign({},state,{userToken:action.userToken,username:action.name})
+        let tempState = Object.assign({},state,{userToken:action.userToken,username:action.name,email:action.email})
         console.log("temp state ",tempState)
         return tempState;
       case "UPDATE_JOBS":
@@ -45,6 +45,7 @@ export default function app() {
         console.log("action type: ",action.type, action.d.data);
         let jobs = action.d.data;
         jobDisplay.renderJobs(jobs);
+        postJob.showNewJobForm();
         let newState = Object.assign({},state,{jobs:jobs})
         console.log("new state ",newState)
         return newState
@@ -53,16 +54,18 @@ export default function app() {
         return state;
       case "RSVP_FOR_JOB":
         console.log("rsvp ",state.username, state.userToken, action.jobId)
-        server.rsvp(state.username, state.userToken, action.jobId)
+        server.rsvp(state.username, state.email, state.userToken, action.jobId)
         return state
       case "JOB_TAKEN":
-        console.log("state ",state,"action ",action)
+        console.log(" job taken!  state ",state,"action ",action)
         server.getJobs(state)
         return state;
       case "POST_NEW_JOB":
         console.log("state ",state,"action ",action)
         server.postJob(state,action)
         return state;
+      case "SEND_EMAIL":
+        server.sendEmail(lister,shower,jobDate,jobTitle)
       default:
          return state
      }
@@ -75,6 +78,8 @@ export default function app() {
   const jobDisplay = new JobDisplay(store)
   store.dispatch({ type: "LOAD_PAGE" })
 
-
+  $('#test-btn').on('click',function(e){
+    server.sendEmail("brian.danilo+2@gmail.com","brian.danilo+1@gmail.com")
+  })
 
 }
