@@ -44,7 +44,7 @@ export default function LoginFlow(store) {
 
   this.showWelcomeBanner = function(action){
     console.log("showing welcome banner")
-    let el = `<p>Hello ${action.name}. Browse or submit a new job!`
+    let el = `<p>Hello ${action.name}! Browse jobs or submit a new one.</p>`
     $('#welcome-banner').show();
     $('#welcome-banner').html(el);
   }

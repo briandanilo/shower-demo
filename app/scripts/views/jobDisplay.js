@@ -6,9 +6,9 @@ export default function JobDisplay(store) {
     $('#jobs-list').empty();
     jobs.forEach(function(i){
       let time = moment(i.jobStartTime).format('l')
-      let el = `<li>${i.name} at ${time}.  Taken by ${i.taker}<button class="rsvp-btn" id="${i.objectId}">RSVP</button></li>`
+      let el = `<li>${i.name} at ${time}.     <button class="job-list-btn rsvp-btn btn btn-default" id="${i.objectId}">RSVP</button></li>`
       if (i.taker != "open")
-        el = `<li>${i.name} at ${time}.  Taken by ${i.taker}.</li>`
+        el = `<li>${i.name} at ${time} (claimed).     <button class="job-list-btn wait-list-btn btn btn-default" id="${i.objectId}">Join Wait List</button></li>`
       $('#jobs-list').append(el);
     })
     $('.rsvp-btn').on('click',function(e){

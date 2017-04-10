@@ -67,9 +67,9 @@ export default function Server(store) {
       data: JSON.stringify({
         "lister":lister,
         "shower":shower,
-        "emailPeople":[lister,shower]
-        // "jobDate":jobDate,
-        // "jobTitle":jobTitle
+        "emailPeople":[lister,shower],
+        "jobDate":jobDate,
+        "jobTitle":jobTitle
       }),
    }
    console.log("sending an email w/ content ",settings.data)
